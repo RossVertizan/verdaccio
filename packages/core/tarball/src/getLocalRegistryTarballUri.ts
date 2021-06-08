@@ -19,7 +19,8 @@ export function getLocalRegistryTarballUri(
   uri: string,
   pkgName: string,
   req: Request,
-  urlPrefix: string | void
+  urlPrefix: string | void,
+  basePath: string | void
 ): string {
   const currentHost = req.headers.host;
 
@@ -29,7 +30,7 @@ export function getLocalRegistryTarballUri(
   const tarballName = extractTarballFromUrl(uri);
   debug('tarball name %o', tarballName);
   // header only set with proxy that setup with HTTPS
-  const domainRegistry = getPublicUrl(urlPrefix || '', req);
+  const domainRegistry = getPublicUrl(urlPrefix || '', basePath || '', req);
 
   return `${domainRegistry}${pkgName}/-/${tarballName}`;
 }

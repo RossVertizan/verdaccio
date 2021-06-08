@@ -115,6 +115,10 @@ const defineAPI = function (config: IConfig, storage: IStorageHandler): any {
     next(ErrorCode.getNotFound(API_ERROR.FILE_NOT_FOUND));
   });
 
+  // Implement base_path
+  const basePath = _.get(config, 'base_path', '/');
+  app.use(basePath, app);
+
   app.use(function (
     err: HttpError,
     req: $RequestExtend,

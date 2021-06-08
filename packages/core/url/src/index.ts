@@ -67,12 +67,12 @@ export function wrapPrefix(prefix: string | void): string {
  * Create base url for registry.
  * @return {String} base registry url
  */
-export function combineBaseUrl(protocol: string, host: string, prefix: string = ''): string {
+export function combineBaseUrl(protocol: string, host: string, prefix: string = '', basePath: string = ''): string {
   debug('combined protocol %o', protocol);
   debug('combined host %o', host);
   const newPrefix = wrapPrefix(prefix);
   debug('combined prefix %o', newPrefix);
-  const groupedURI = new URL(wrapPrefix(prefix), `${protocol}://${host}`);
+  const groupedURI = new URL(wrapPrefix(prefix), `${protocol}://${host}/${basePath}`);
   const result = groupedURI.href;
   debug('combined url %o', result);
   return result;
@@ -91,9 +91,11 @@ export function validateURL(publicUrl: string | void) {
   }
 }
 
-export function getPublicUrl(url_prefix: string = '', req): string {
+export function getPublicUrl(url_prefix: string = '', base_path: string = '',req): string {
+  // Remove any leading or trailing / user may have included
+  let basePath = base_path.replace(/\//g, '')
   if (validateURL(process.env.VERDACCIO_PUBLIC_URL as string)) {
-    const envURL = new URL(wrapPrefix(url_prefix), process.env.VERDACCIO_PUBLIC_URL as string).href;
+    const envURL = new URL(`/${basePath}/${wrapPrefix(url_prefix)}`, process.env.VERDACCIO_PUBLIC_URL as string).href;
     debug('public url by env %o', envURL);
     return envURL;
   } else if (req.get('host')) {
@@ -103,7 +105,7 @@ export function getPublicUrl(url_prefix: string = '', req): string {
     }
     const protoHeader = process.env.VERDACCIO_FORWARDED_PROTO ?? HEADERS.FORWARDED_PROTO;
     const protocol = getWebProtocol(req.get(protoHeader), req.protocol);
-    const combinedUrl = combineBaseUrl(protocol, host, url_prefix);
+    const combinedUrl = combineBaseUrl(protocol, host, url_prefix, basePath);
     debug('public url by request %o', combinedUrl);
     return combinedUrl;
   } else {

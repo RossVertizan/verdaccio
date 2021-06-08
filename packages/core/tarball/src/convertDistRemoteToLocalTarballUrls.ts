@@ -14,14 +14,15 @@ import { getLocalRegistryTarballUri } from './getLocalRegistryTarballUri';
 export function convertDistRemoteToLocalTarballUrls(
   pkg: Package,
   req: Request,
-  urlPrefix: string | void
+  urlPrefix: string | void,
+  basePath: string | void
 ): Package {
   for (const ver in pkg.versions) {
     if (Object.prototype.hasOwnProperty.call(pkg.versions, ver)) {
       const distName = pkg.versions[ver].dist;
 
       if (_.isNull(distName) === false && _.isNull(distName.tarball) === false) {
-        distName.tarball = getLocalRegistryTarballUri(distName.tarball, pkg.name, req, urlPrefix);
+        distName.tarball = getLocalRegistryTarballUri(distName.tarball, pkg.name, req, urlPrefix, basePath);
       }
     }
   }

@@ -20,8 +20,8 @@ const defaultManifestFiles = {
 };
 
 export default function renderHTML(config, manifest, manifestFiles, req, res) {
-  const { url_prefix } = config;
-  const base = getPublicUrl(config?.url_prefix, req);
+  const { url_prefix, base_path } = config;
+  const base = getPublicUrl(config?.url_prefix, config?.base_path, req);
   const basename = new URL(base).pathname;
   const language = config?.i18n?.web ?? DEFAULT_LANGUAGE;
   const darkMode = config?.web?.darkMode ?? false;
@@ -45,6 +45,7 @@ export default function renderHTML(config, manifest, manifestFiles, req, res) {
   const options = {
     darkMode,
     url_prefix,
+    base_path,
     basename,
     base,
     primaryColor,

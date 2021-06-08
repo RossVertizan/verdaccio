@@ -54,7 +54,7 @@ export default function (
           return next(err);
         }
         debug('convert dist remote to local with prefix %o', config?.url_prefix);
-        metadata = convertDistRemoteToLocalTarballUrls(metadata, req, config?.url_prefix);
+        metadata = convertDistRemoteToLocalTarballUrls(metadata, req, config?.url_prefix, config?.base_path);
 
         let queryVersion = req.params.version;
         debug('query by param version: %o', queryVersion);

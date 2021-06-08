@@ -171,5 +171,9 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,yml,yaml,md}": "prettier --write",
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix"
+  },
+  "dependencies": {
+    "@verdaccio/cli": "^5.0.0-alpha.4",
+    "pnpm": "^6.7.1"
   }
 }
